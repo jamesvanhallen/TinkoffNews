@@ -1,5 +1,6 @@
 package com.james.tinkoffnews.mvp.presenter
 
+import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.james.tinkoffnews.App
 import com.james.tinkoffnews.api.Api
@@ -23,7 +24,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
     }
 
     fun loadNewsFromNetwork() {
-
+        Log.v("PRESENTER", "load from network")
         val sub = api.getNewsList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -42,6 +43,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
 
                 }, { throwable ->
                     run {
+                        Log.e("PRESENTER", "network on error call")
                         val error = httpErrorHandler(throwable)
                         viewState.onError(error)
                     }
@@ -52,6 +54,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
     }
 
     fun loadNewsFromDB(){
+        Log.v("NewsListFragment", "load from db")
         val subscription = realm.where(News::class.java)
                 .findAllAsync()
                 .asObservable()
@@ -68,6 +71,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
                     }
                 }, { throwable ->
                     run {
+                        Log.e("NewsListFragment", "db on error call")
                         val error = httpErrorHandler(throwable)
                         viewState.onError(error)
                     }
@@ -77,11 +81,6 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
 
     fun presentModels(isOnline: Boolean) {
         if (!isOnline) loadNewsFromDB() else loadNewsFromNetwork()
-    }
-
-    override fun onDestroy() {
-        realm.close()
-        super.onDestroy()
     }
 
 }

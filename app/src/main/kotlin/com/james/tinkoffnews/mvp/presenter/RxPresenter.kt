@@ -12,6 +12,7 @@ abstract class RxPresenter<V : MvpView> : MvpPresenter<V>() {
     protected var mainSubscription = CompositeSubscription()
 
     override fun onDestroy() {
+        Log.d("REF", "onDestroyPresenter")
         mainSubscription.clear()
         super.onDestroy()
     }

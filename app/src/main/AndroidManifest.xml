@@ -13,7 +13,7 @@
         android:name=".App"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.james.tinkoffnews.view.activity.MainActivity">
+        <activity android:name="com.james.tinkoffnews.ui.activity.MainActivity">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN"/>

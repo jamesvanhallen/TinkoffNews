@@ -1,6 +1,8 @@
-package com.james.tinkoffnews.view.fragment
+package com.james.tinkoffnews.ui.fragment
 
 import android.os.Bundle
+import android.text.Html
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +48,13 @@ class NewsContentFragment : MvpAppCompatFragment(), NewsContentView{
 
 
     override fun onSuccess(newsContent: NewsContent) {
-        content.text = newsContent.content
+        val result: Spanned
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(newsContent.content, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            result = Html.fromHtml(newsContent.content)
+        }
+        content.text = result
     }
 
     override fun onError(error: String) {

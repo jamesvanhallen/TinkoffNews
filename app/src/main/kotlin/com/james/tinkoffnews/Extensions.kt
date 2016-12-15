@@ -8,9 +8,12 @@ import android.net.ConnectivityManager
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+
+
 
 fun View.show() {
     this.visibility = View.VISIBLE
@@ -54,5 +57,7 @@ private fun AppCompatActivity.initTransaction(f: Fragment, addToBackStack: Boole
 
     if (addToBackStack) fragTransaction.addToBackStack(f.javaClass.simpleName)
 
-    fragTransaction.commitAllowingStateLoss()
+    Log.wtf("TRRR", "add frag $f.javaClass.simpleName")
+
+    fragTransaction.commit()
 }

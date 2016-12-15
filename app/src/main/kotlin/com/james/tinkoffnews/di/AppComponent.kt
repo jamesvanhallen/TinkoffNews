@@ -2,8 +2,8 @@ package com.james.tinkoffnews.di
 
 import com.james.tinkoffnews.mvp.presenter.NewsContentPresenter
 import com.james.tinkoffnews.mvp.presenter.NewsListPresenter
-import com.james.tinkoffnews.view.fragment.NewsListFragment
-import com.james.tinkoffnews.view.fragment.NewsContentFragment
+import com.james.tinkoffnews.ui.fragment.NewsListFragment
+import com.james.tinkoffnews.ui.fragment.NewsContentFragment
 import dagger.Component
 import javax.inject.Singleton
 

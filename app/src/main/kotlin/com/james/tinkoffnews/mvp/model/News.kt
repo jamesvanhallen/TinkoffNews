@@ -3,8 +3,9 @@ package com.james.tinkoffnews.mvp.model
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import org.joda.time.DateTime
 
-open class News() : RealmObject() {
+open class News() : RealmObject(), Comparable<News> {
 
     companion object {
         const val ID = "id"
@@ -16,6 +17,7 @@ open class News() : RealmObject() {
     }
 
     @SerializedName(ID)
+    @PrimaryKey
     var id: Int? = null
 
     @SerializedName(NAME)
@@ -31,6 +33,10 @@ open class News() : RealmObject() {
     var baknId: Int? = null
 
     @SerializedName(REALM_ID)
-    @PrimaryKey
     var realmId: Int? = null
+
+    override fun compareTo(other: News): Int {
+        return other.date?.time!!.compareTo(date?.time!!)
+    }
+
 }
