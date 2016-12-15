@@ -1,5 +1,6 @@
 package com.james.tinkoffnews.mvp.presenter
 
+import android.R.attr.data
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.james.tinkoffnews.App
@@ -7,8 +8,10 @@ import com.james.tinkoffnews.api.Api
 import com.james.tinkoffnews.mvp.model.News
 import com.james.tinkoffnews.mvp.view.NewsListView
 import io.realm.Realm
+import io.realm.Sort
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
@@ -23,7 +26,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
         App.appComponent.inject(this)
     }
 
-    fun loadNewsFromNetwork() {
+    fun refresh() {
         Log.v("PRESENTER", "load from network")
         val sub = api.getNewsList()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -33,11 +36,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
                     run {
                         val newsList = response.payload
                         if (newsList.isNotEmpty()) {
-                            viewState.onSuccess(newsList)
                             realm.executeTransaction { realm -> realm.insertOrUpdate(newsList) }
-                        }
-                        else {
-                            viewState.onEmptyData()
                         }
                     }
 
@@ -56,14 +55,14 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
     fun loadNewsFromDB(){
         Log.v("NewsListFragment", "load from db")
         val subscription = realm.where(News::class.java)
-                .findAllAsync()
+                .findAllSortedAsync(News.DATE, Sort.DESCENDING)
                 .asObservable()
-                .observeOn(AndroidSchedulers.mainThread())
+                .filter { result -> result.isLoaded}
                 .subscribe({
-                    response ->
+                    listFromDB ->
                     run {
-                        if (response.isNotEmpty()) {
-                            viewState.onSuccess(response)
+                        if (listFromDB.isNotEmpty()) {
+                            viewState.onSuccess(listFromDB)
                         }
                         else {
                             viewState.onEmptyData()
@@ -78,9 +77,4 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
                 })
         mainSubscription.add(subscription)
     }
-
-    fun presentModels(isOnline: Boolean) {
-        if (!isOnline) loadNewsFromDB() else loadNewsFromNetwork()
-    }
-
 }

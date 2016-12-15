@@ -1,6 +1,5 @@
 package com.james.tinkoffnews.ui.activity
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -16,21 +15,23 @@ class MainActivity : MvpAppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
-        if(supportActionBar!=null) {
+        supportActionBar?.apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setHomeButtonEnabled(true)
             supportActionBar?.show()
         }
+
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        if (supportFragmentManager.findFragmentById(R.id.main_container)==null) {
+        supportFragmentManager.addOnBackStackChangedListener { logStack() }
+
+        if (supportFragmentManager.findFragmentById(R.id.main_container) == null) {
             replaceFragment(NewsListFragment.newInstance())
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
-        super.onConfigurationChanged(newConfig)
+    private fun logStack() {
         val size = supportFragmentManager.backStackEntryCount
-        Log.d("MainActivity", "size stack $size" )
+        Log.d("TRRR", "size stack $size")
     }
 }

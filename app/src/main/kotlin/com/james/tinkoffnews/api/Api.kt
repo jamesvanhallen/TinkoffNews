@@ -8,7 +8,7 @@ import rx.Observable
 
 interface Api {
 
-    @GET("news ")
+    @GET("news")
     fun getNewsList(): Observable<NewsResponse>
 
     @GET("news_content")

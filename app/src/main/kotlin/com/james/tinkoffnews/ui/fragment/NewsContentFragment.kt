@@ -1,5 +1,6 @@
 package com.james.tinkoffnews.ui.fragment
 
+import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
@@ -34,10 +35,14 @@ class NewsContentFragment : MvpAppCompatFragment(), NewsContentView{
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         App.appComponent.inject(this)
-        val v = inflater?.inflate(R.layout.fragment_news_content, container, false)
-        return v
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        return inflater?.inflate(R.layout.fragment_news_content, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,7 +54,7 @@ class NewsContentFragment : MvpAppCompatFragment(), NewsContentView{
 
     override fun onSuccess(newsContent: NewsContent) {
         val result: Spanned
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             result = Html.fromHtml(newsContent.content, Html.FROM_HTML_MODE_LEGACY)
         } else {
             result = Html.fromHtml(newsContent.content)

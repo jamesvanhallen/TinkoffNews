@@ -1,5 +1,6 @@
 package com.james.tinkoffnews.adapter
 
+import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.LayoutInflater
@@ -15,9 +16,10 @@ import android.text.Spanned
 import android.util.Log
 
 
-class RoutesAdapter(var listener: NewsClickListener) : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
+class RoutesAdapter() : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
 
     var mList: List<News> = ArrayList()
+    var listener: NewsClickListener? = null
     val formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoutesAdapter.ViewHolder {
@@ -29,14 +31,14 @@ class RoutesAdapter(var listener: NewsClickListener) : RecyclerView.Adapter<Rout
     override fun onBindViewHolder(holder: RoutesAdapter.ViewHolder, position: Int) {
         val news = mList[position]
         val result: Spanned
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             result = Html.fromHtml(news.text, Html.FROM_HTML_MODE_LEGACY)
         } else {
             result = Html.fromHtml(news.text)
         }
         holder.itemView.name.text =  result
-        holder.itemView.date.text = formatter.print(news.date?.time!!)
-        holder.itemView.setOnClickListener { listener.onClick(news.id) }
+        holder.itemView.date.text = formatter.print(news.publicationDate!!)
+        holder.itemView.setOnClickListener { listener?.onClick(news.id) }
         Log.wtf("ADAPTER", "bind")
 
     }

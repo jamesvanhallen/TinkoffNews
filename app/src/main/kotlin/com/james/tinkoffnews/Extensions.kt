@@ -57,7 +57,9 @@ private fun AppCompatActivity.initTransaction(f: Fragment, addToBackStack: Boole
 
     if (addToBackStack) fragTransaction.addToBackStack(f.javaClass.simpleName)
 
-    Log.wtf("TRRR", "add frag $f.javaClass.simpleName")
+    val name = f.javaClass.simpleName
+
+    Log.wtf("TRRR", "add frag $name")
 
     fragTransaction.commit()
 }

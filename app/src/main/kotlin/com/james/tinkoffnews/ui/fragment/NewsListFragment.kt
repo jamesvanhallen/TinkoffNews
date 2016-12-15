@@ -2,7 +2,6 @@ package com.james.tinkoffnews.ui.fragment
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,14 +17,13 @@ import com.james.tinkoffnews.mvp.presenter.NewsListPresenter
 import com.james.tinkoffnews.mvp.view.NewsListView
 import com.james.tinkoffnews.ui.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_news_list.*
-import java.util.*
 
 class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener {
 
     @InjectPresenter
-    lateinit var mNewsListPresenter: NewsListPresenter
+    lateinit var newsListPresenter: NewsListPresenter
 
-    var adapter: RoutesAdapter = RoutesAdapter(this)
+    var adapter = RoutesAdapter()
 
     private val refreshRun = Runnable {
         refresh.isRefreshing = true
@@ -40,25 +38,30 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         App.appComponent.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_news_list, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter.listener = this
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
-        refresh.setOnRefreshListener { onRefresh() }
+        refresh.setOnRefreshListener { refreshModels() }
         refresh.setColorSchemeResources(
                 R.color.colorPrimary,
                 R.color.colorPrimaryDark)
 
         showProgress()
-        //if(savedInstanceState==null) {
-        presentModels()
-        //  }
+        newsListPresenter.loadNewsFromDB()
+        refreshModels()
 
     }
 
@@ -69,20 +72,24 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
 
     }
 
-    private fun presentModels() {
-        mNewsListPresenter.presentModels(activity.isOnline())
+    private fun refreshModels() {
+        if (!(activity as MainActivity).isOnline()) onError(getString(R.string.not_online))
+        else newsListPresenter.refresh()
     }
 
     override fun onSuccess(list: List<News>) {
         Log.d("NewsListFragment", "onSuccess " + list.size)
-        Collections.sort(list)
+        empty.hide()
+        recyclerView.show()
         adapter.setItems(list)
         cancelProgress()
     }
 
     override fun onEmptyData() {
         Log.d("NewsListFragment", "onEmpty")
-        showSnackbar(getString(R.string.nothing_to_show))
+        recyclerView.hide()
+        empty.show()
+        empty.text = getString(R.string.nothing_to_show)
         cancelProgress()
     }
 
@@ -93,25 +100,17 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
     }
 
     override fun onClick(id: Int?) {
-
+        Log.i("NewsListFragment", "error click")
         if (id != null && (activity as MainActivity).isOnline()) {
             (activity as MainActivity).addFragment(NewsContentFragment.newInstance(id))
         }
     }
 
-    fun onRefresh() {
-        if (!(activity as MainActivity).isOnline()) {
-            showSnackbar(getString(R.string.not_online))
-        } else {
-            presentModels()
-        }
-    }
-
     private fun showSnackbar(text: String) {
-        val snack = Snackbar.make(recyclerView, text, Snackbar.LENGTH_LONG)
+        val snack = Snackbar.make(recyclerView, text, Snackbar.LENGTH_INDEFINITE)
         snack.setWhiteText()
         snack.show()
-        snack.setAction(getString(R.string.snack_bar_action)) { presentModels()}
+        snack.setAction(getString(R.string.snack_bar_action)) { refreshModels()}
         cancelProgress()
     }
 
@@ -125,11 +124,8 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
             refresh.isRefreshing = false
             refresh.destroyDrawingCache()
             refresh.clearAnimation()
-
         }
     }
-
-
 }
 
 

@@ -1,10 +1,13 @@
 package com.james.tinkoffnews.di
 
+import com.google.gson.ExclusionStrategy
 import com.james.tinkoffnews.App
 import com.james.tinkoffnews.Const
 import com.james.tinkoffnews.api.Api
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.james.tinkoffnews.mvp.model.News
+import com.james.tinkoffnews.mvp.model.deserializer.NewsDeserializer
 import dagger.Module
 import dagger.Provides
 import io.realm.Realm
@@ -24,6 +27,7 @@ class AppModule(var app: App) {
     fun provideGson(): Gson {
         return GsonBuilder()
                 .setPrettyPrinting()
+                .registerTypeAdapter(News::class.java, NewsDeserializer())
                 .serializeNulls()
                 .create()
     }
