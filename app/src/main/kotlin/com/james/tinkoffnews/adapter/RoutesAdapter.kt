@@ -13,14 +13,13 @@ import kotlinx.android.synthetic.main.item_route.view.*
 import org.joda.time.format.DateTimeFormat
 import java.util.*
 import android.text.Spanned
-import android.util.Log
-
+import com.james.tinkoffnews.Const
 
 class RoutesAdapter() : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
 
     var mList: List<News> = ArrayList()
     var listener: NewsClickListener? = null
-    val formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")!!
+    val formatter = DateTimeFormat.forPattern(Const.DATE_FORMAT)!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoutesAdapter.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,17 +29,17 @@ class RoutesAdapter() : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RoutesAdapter.ViewHolder, position: Int) {
         val news = mList[position]
+
         val result: Spanned
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             result = Html.fromHtml(news.text, Html.FROM_HTML_MODE_LEGACY)
         } else {
             result = Html.fromHtml(news.text)
         }
-        holder.itemView.name.text =  result
+        holder.itemView.name.text = result
+
         holder.itemView.date.text = formatter.print(news.publicationDate!!)
         holder.itemView.setOnClickListener { listener?.onClick(news.id) }
-        Log.wtf("ADAPTER", "bind")
-
     }
 
     override fun getItemCount(): Int {

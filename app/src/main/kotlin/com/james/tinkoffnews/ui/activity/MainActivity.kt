@@ -1,7 +1,6 @@
 package com.james.tinkoffnews.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.james.tinkoffnews.R
 import com.james.tinkoffnews.replaceFragment
@@ -23,15 +22,8 @@ class MainActivity : MvpAppCompatActivity() {
 
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
-        supportFragmentManager.addOnBackStackChangedListener { logStack() }
-
         if (supportFragmentManager.findFragmentById(R.id.main_container) == null) {
             replaceFragment(NewsListFragment.newInstance())
         }
-    }
-
-    private fun logStack() {
-        val size = supportFragmentManager.backStackEntryCount
-        Log.d("TRRR", "size stack $size")
     }
 }

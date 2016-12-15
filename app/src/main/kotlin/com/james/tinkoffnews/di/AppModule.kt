@@ -1,11 +1,10 @@
 package com.james.tinkoffnews.di
 
-import com.google.gson.ExclusionStrategy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.james.tinkoffnews.App
 import com.james.tinkoffnews.Const
 import com.james.tinkoffnews.api.Api
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.james.tinkoffnews.mvp.model.News
 import com.james.tinkoffnews.mvp.model.deserializer.NewsDeserializer
 import dagger.Module
@@ -61,7 +60,7 @@ class AppModule(var app: App) {
 
     @Provides
     @Singleton
-    fun getDB() : Realm {
+    fun getDB(): Realm {
         return Realm.getDefaultInstance()
     }
 

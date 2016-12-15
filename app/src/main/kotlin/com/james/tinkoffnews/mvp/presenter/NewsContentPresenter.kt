@@ -1,6 +1,5 @@
 package com.james.tinkoffnews.mvp.presenter
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.james.tinkoffnews.App
 import com.james.tinkoffnews.api.Api
@@ -28,9 +27,7 @@ class NewsContentPresenter : RxPresenter<NewsContentView>() {
                     response ->
                     run {
                         val newsContent = response.payload
-                        Log.d("NEWS", "content " + newsContent.toString())
                         viewState.onSuccess(newsContent)
-
                     }
 
                 }, { throwable ->

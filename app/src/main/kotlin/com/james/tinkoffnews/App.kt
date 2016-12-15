@@ -6,15 +6,14 @@ import com.james.tinkoffnews.di.AppModule
 import com.james.tinkoffnews.di.DaggerAppComponent
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import net.danlew.android.joda.JodaTimeAndroid
 import io.realm.rx.RealmObservableFactory
+import net.danlew.android.joda.JodaTimeAndroid
 
 class App : Application() {
 
     companion object {
 
         lateinit var appComponent: AppComponent
-
     }
 
     override fun onCreate() {

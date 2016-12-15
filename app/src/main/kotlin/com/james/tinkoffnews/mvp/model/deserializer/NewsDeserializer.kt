@@ -7,7 +7,7 @@ import com.google.gson.JsonObject
 import com.james.tinkoffnews.mvp.model.News
 import java.lang.reflect.Type
 
-class NewsDeserializer : JsonDeserializer<News>{
+class NewsDeserializer : JsonDeserializer<News> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): News {
         val news = News()
         val jsonObj = json as JsonObject

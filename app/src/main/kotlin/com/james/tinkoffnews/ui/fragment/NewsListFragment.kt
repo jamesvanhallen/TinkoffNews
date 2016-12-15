@@ -3,7 +3,6 @@ package com.james.tinkoffnews.ui.fragment
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,13 +28,11 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
         refresh.isRefreshing = true
     }
 
-
     companion object {
 
         fun newInstance(): NewsListFragment {
             return NewsListFragment()
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,13 +59,11 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
         showProgress()
         newsListPresenter.loadNewsFromDB()
         refreshModels()
-
     }
 
     override fun onPause() {
         cancelProgress()
         super.onPause()
-        Log.d("REF", "onPause")
 
     }
 
@@ -78,7 +73,6 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
     }
 
     override fun onSuccess(list: List<News>) {
-        Log.d("NewsListFragment", "onSuccess " + list.size)
         empty.hide()
         recyclerView.show()
         adapter.setItems(list)
@@ -86,7 +80,6 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
     }
 
     override fun onEmptyData() {
-        Log.d("NewsListFragment", "onEmpty")
         recyclerView.hide()
         empty.show()
         empty.text = getString(R.string.nothing_to_show)
@@ -94,13 +87,11 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
     }
 
     override fun onError(error: String) {
-        Log.e("NewsListFragment", "error $error")
         showSnackbar(error)
         cancelProgress()
     }
 
     override fun onClick(id: Int?) {
-        Log.i("NewsListFragment", "error click")
         if (id != null && (activity as MainActivity).isOnline()) {
             (activity as MainActivity).addFragment(NewsContentFragment.newInstance(id))
         }
@@ -110,7 +101,7 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
         val snack = Snackbar.make(recyclerView, text, Snackbar.LENGTH_INDEFINITE)
         snack.setWhiteText()
         snack.show()
-        snack.setAction(getString(R.string.snack_bar_action)) { refreshModels()}
+        snack.setAction(getString(R.string.snack_bar_action)) { refreshModels() }
         cancelProgress()
     }
 

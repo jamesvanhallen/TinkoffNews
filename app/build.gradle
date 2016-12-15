@@ -57,10 +57,8 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:cardview-v7:25.0.0'
+    compile 'com.android.support:cardview-v7:25.1.0'
     testCompile 'junit:junit:4.12'
-
-    testCompile 'org.mockito:mockito-core:2.0.42-beta'
 
     //kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -87,9 +85,6 @@ dependencies {
     compile 'net.danlew:android.joda:2.9.4.3'
 
     //moxy
-    compile 'com.arello-mobile:moxy-app-compat:1.1.1'
-    kapt 'com.arello-mobile:moxy-compiler:1.1.1'
-
-    //some extensions
-    compile 'com.pawegio.kandroid:kandroid:0.5.0@aar'
+    compile 'com.arello-mobile:moxy-app-compat:1.3.3'
+    kapt 'com.arello-mobile:moxy-compiler:1.3.3'
 }
