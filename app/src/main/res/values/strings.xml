@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">TinkoffNews</string>
+    <string name="nothing_to_show">Nothing to show</string>
+    <string name="not_online">Отсутствует интернет соединение</string>
+    <string name="snack_bar_action">UNDO</string>
+</resources>
