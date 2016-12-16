@@ -14,6 +14,7 @@ import com.james.tinkoffnews.R
 import com.james.tinkoffnews.mvp.model.NewsContent
 import com.james.tinkoffnews.mvp.presenter.NewsContentPresenter
 import com.james.tinkoffnews.mvp.view.NewsContentView
+import com.james.tinkoffnews.ui.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_news_content.*
 
 class NewsContentFragment : MvpAppCompatFragment(), NewsContentView{
@@ -41,12 +42,11 @@ class NewsContentFragment : MvpAppCompatFragment(), NewsContentView{
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         return inflater?.inflate(R.layout.fragment_news_content, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val id = arguments.getInt(ID)
         mNewsContentPresenter.loadNewsContent(id)
     }

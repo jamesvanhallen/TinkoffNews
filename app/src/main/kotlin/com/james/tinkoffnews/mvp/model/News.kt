@@ -1,10 +1,22 @@
 package com.james.tinkoffnews.mvp.model
 
-import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 open class News() : RealmObject() {
+
+    @PrimaryKey
+    var id: Int? = null
+
+    var name: String? = null
+
+    var text: String? = null
+
+    var publicationDate: Long? = null
+
+    var baknId: Int? = null
+
+    var realmId: Int? = null
 
     companion object {
         const val ID = "id"
@@ -15,24 +27,4 @@ open class News() : RealmObject() {
         const val BANK_ID = "bankInfoTypeId"
         const val MILLS = "milliseconds"
     }
-
-    @SerializedName(ID)
-    @PrimaryKey
-    var id: Int? = null
-
-    @SerializedName(NAME)
-    var name: String? = null
-
-    @SerializedName(TEXT)
-    var text: String? = null
-
-    @SerializedName(DATE)
-    var publicationDate: Long? = null
-
-    @SerializedName(BANK_ID)
-    var baknId: Int? = null
-
-    @SerializedName(REALM_ID)
-    var realmId: Int? = null
-
 }

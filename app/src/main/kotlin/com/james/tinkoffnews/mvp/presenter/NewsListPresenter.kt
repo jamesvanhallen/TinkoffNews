@@ -40,6 +40,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
                     run {
                         val error = httpErrorHandler(throwable)
                         viewState.onError(error)
+                        cancelProgress()
                     }
                 })
 
@@ -57,16 +58,23 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
                     run {
                         if (listFromDB.isNotEmpty()) {
                             viewState.onSuccess(listFromDB)
+                            cancelProgress()
                         } else {
                             viewState.onEmptyData()
+                            cancelProgress()
                         }
                     }
                 }, { throwable ->
                     run {
                         val error = httpErrorHandler(throwable)
                         viewState.onError(error)
+                        cancelProgress()
                     }
                 })
         mainSubscription.add(subscription)
+    }
+
+    fun cancelProgress() {
+        viewState.onCancelProgress()
     }
 }

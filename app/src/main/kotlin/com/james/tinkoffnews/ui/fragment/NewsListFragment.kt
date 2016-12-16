@@ -10,14 +10,13 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.james.tinkoffnews.*
 import com.james.tinkoffnews.adapter.RoutesAdapter
-import com.james.tinkoffnews.listener.NewsClickListener
 import com.james.tinkoffnews.mvp.model.News
 import com.james.tinkoffnews.mvp.presenter.NewsListPresenter
 import com.james.tinkoffnews.mvp.view.NewsListView
 import com.james.tinkoffnews.ui.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_news_list.*
 
-class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener {
+class NewsListFragment : MvpAppCompatFragment(), NewsListView, RoutesAdapter.NewsClickListener {
 
     @InjectPresenter
     lateinit var newsListPresenter: NewsListPresenter
@@ -37,6 +36,7 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        adapter.listener = this
         App.appComponent.inject(this)
     }
 
@@ -46,8 +46,6 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter.listener = this
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
@@ -62,7 +60,7 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
     }
 
     override fun onPause() {
-        cancelProgress()
+        newsListPresenter.cancelProgress()
         super.onPause()
 
     }
@@ -76,24 +74,33 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
         empty.hide()
         recyclerView.show()
         adapter.setItems(list)
-        cancelProgress()
+        newsListPresenter.cancelProgress()
     }
 
     override fun onEmptyData() {
         recyclerView.hide()
         empty.show()
         empty.text = getString(R.string.nothing_to_show)
-        cancelProgress()
+        newsListPresenter.cancelProgress()
     }
 
     override fun onError(error: String) {
         showSnackbar(error)
-        cancelProgress()
+        newsListPresenter.cancelProgress()
     }
 
-    override fun onClick(id: Int?) {
-        if (id != null && (activity as MainActivity).isOnline()) {
-            (activity as MainActivity).addFragment(NewsContentFragment.newInstance(id))
+    override fun onCancelProgress() {
+        if (refresh != null) {
+            refresh.removeCallbacks(refreshRun)
+            refresh.isRefreshing = false
+            refresh.destroyDrawingCache()
+            refresh.clearAnimation()
+        }
+    }
+
+    override fun onClick(news: News) {
+        if ((activity as MainActivity).isOnline()) {
+            (activity as MainActivity).addFragment(NewsContentFragment.newInstance(news.id!!))
         }
     }
 
@@ -102,20 +109,11 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, NewsClickListener
         snack.setWhiteText()
         snack.show()
         snack.setAction(getString(R.string.snack_bar_action)) { refreshModels() }
-        cancelProgress()
+        newsListPresenter.cancelProgress()
     }
 
     fun showProgress() {
         if (refresh != null) refresh.post { refreshRun }
-    }
-
-    fun cancelProgress() {
-        if (refresh != null) {
-            refresh.removeCallbacks(refreshRun)
-            refresh.isRefreshing = false
-            refresh.destroyDrawingCache()
-            refresh.clearAnimation()
-        }
     }
 }
 
