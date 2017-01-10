@@ -32,8 +32,7 @@ class NewsContentPresenter : RxPresenter<NewsContentView>() {
 
                 }, { throwable ->
                     run {
-                        val error = httpErrorHandler(throwable)
-                        viewState.onError(error)
+                        viewState.onError(throwable)
                     }
                 })
 

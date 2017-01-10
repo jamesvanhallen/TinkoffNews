@@ -16,12 +16,12 @@ import com.james.tinkoffnews.mvp.view.NewsListView
 import com.james.tinkoffnews.ui.activity.MainActivity
 import kotlinx.android.synthetic.main.fragment_news_list.*
 
-class NewsListFragment : MvpAppCompatFragment(), NewsListView, RoutesAdapter.NewsClickListener {
+class NewsListFragment : MvpAppCompatFragment(), NewsListView {
 
     @InjectPresenter
     lateinit var newsListPresenter: NewsListPresenter
 
-    var adapter = RoutesAdapter()
+    lateinit var adapter: RoutesAdapter
 
     private val refreshRun = Runnable {
         refresh.isRefreshing = true
@@ -36,8 +36,8 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, RoutesAdapter.New
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter.listener = this
         App.appComponent.inject(this)
+        adapter = RoutesAdapter { onItemSelected(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,7 +66,7 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, RoutesAdapter.New
     }
 
     private fun refreshModels() {
-        if (!(activity as MainActivity).isOnline()) onError(getString(R.string.not_online))
+        if (!(activity as MainActivity).isOnline()) onError(Throwable(getString(R.string.not_online)))
         else newsListPresenter.refresh()
     }
 
@@ -84,8 +84,8 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, RoutesAdapter.New
         newsListPresenter.cancelProgress()
     }
 
-    override fun onError(error: String) {
-        showSnackbar(error)
+    override fun onError(error: Throwable) {
+        showSnackbar(NetworkUtils.httpErrorHandler(activity, error))
         newsListPresenter.cancelProgress()
     }
 
@@ -98,9 +98,11 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView, RoutesAdapter.New
         }
     }
 
-    override fun onClick(news: News) {
+    fun onItemSelected(news: News) {
         if ((activity as MainActivity).isOnline()) {
             (activity as MainActivity).addFragment(NewsContentFragment.newInstance(news.id!!))
+        } else {
+            showSnackbar(getString(R.string.not_online))
         }
     }
 

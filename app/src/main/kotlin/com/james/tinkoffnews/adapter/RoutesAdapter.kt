@@ -14,11 +14,9 @@ import java.util.*
 import android.text.Spanned
 import com.james.tinkoffnews.Const
 
-class RoutesAdapter() : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
+class RoutesAdapter(var listener: (News) -> Unit) : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
 
     var mList: List<News> = ArrayList()
-    var listener: NewsClickListener? = null
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoutesAdapter.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,7 +44,7 @@ class RoutesAdapter() : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
 
         val formatter = DateTimeFormat.forPattern(Const.DATE_FORMAT)!!
 
-        fun bind(news: News, listener: NewsClickListener?) {
+        fun bind(news: News, listener: (News) -> Unit) {
             val result: Spanned
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 result = Html.fromHtml(news.text, Html.FROM_HTML_MODE_LEGACY)
@@ -56,12 +54,8 @@ class RoutesAdapter() : RecyclerView.Adapter<RoutesAdapter.ViewHolder>() {
             itemView.name.text = result
 
             itemView.date.text = formatter.print(news.publicationDate!!)
-            itemView.card_view.setOnClickListener { listener?.onClick(news) }
+
+            itemView.card_view.setOnClickListener { listener(news) }
         }
-    }
-
-    interface NewsClickListener {
-
-        fun onClick(news: News)
     }
 }

@@ -3,4 +3,6 @@
     <string name="nothing_to_show">Пусто!</string>
     <string name="not_online">Отсутствует интернет соединение</string>
     <string name="snack_bar_action">ПОВТОРИТЬ</string>
+    <string name="unknown_error">Неизвесная ошибка</string>
+    <string name="server_error">Ошибка сервера</string>
 </resources>

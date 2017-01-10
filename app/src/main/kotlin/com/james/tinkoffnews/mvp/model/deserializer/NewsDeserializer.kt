@@ -14,7 +14,7 @@ class NewsDeserializer : JsonDeserializer<News> {
         news.name = jsonObj.get(News.NAME).asString
         news.id = jsonObj.get(News.ID).asInt
         news.text = jsonObj.get(News.TEXT).asString
-        news.baknId = jsonObj.get(News.BANK_ID).asInt
+        news.bankId = jsonObj.get(News.BANK_ID).asInt
         news.publicationDate = jsonObj.get(News.DATE).asJsonObject.get(News.MILLS).asLong
 
         return news

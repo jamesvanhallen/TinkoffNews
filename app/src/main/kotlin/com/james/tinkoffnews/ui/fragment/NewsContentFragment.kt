@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.james.tinkoffnews.App
+import com.james.tinkoffnews.NetworkUtils
 import com.james.tinkoffnews.R
 import com.james.tinkoffnews.mvp.model.NewsContent
 import com.james.tinkoffnews.mvp.presenter.NewsContentPresenter
@@ -62,7 +63,7 @@ class NewsContentFragment : MvpAppCompatFragment(), NewsContentView{
         content.text = result
     }
 
-    override fun onError(error: String) {
-        content.text = error
+    override fun onError(error: Throwable) {
+        content.text = NetworkUtils.httpErrorHandler(activity, error)
     }
 }

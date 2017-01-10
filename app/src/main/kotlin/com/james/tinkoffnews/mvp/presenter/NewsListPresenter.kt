@@ -38,8 +38,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
 
                 }, { throwable ->
                     run {
-                        val error = httpErrorHandler(throwable)
-                        viewState.onError(error)
+                        viewState.onError(throwable)
                         cancelProgress()
                     }
                 })
@@ -66,8 +65,7 @@ class NewsListPresenter : RxPresenter<NewsListView>() {
                     }
                 }, { throwable ->
                     run {
-                        val error = httpErrorHandler(throwable)
-                        viewState.onError(error)
+                        viewState.onError(throwable)
                         cancelProgress()
                     }
                 })

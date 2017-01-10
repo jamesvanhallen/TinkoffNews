@@ -7,7 +7,7 @@ interface NewsListView : MvpView {
 
     fun onSuccess(list: List<News>)
     fun onEmptyData()
-    fun onError(error: String)
+    fun onError(error: Throwable)
     fun onCancelProgress()
 
 }
