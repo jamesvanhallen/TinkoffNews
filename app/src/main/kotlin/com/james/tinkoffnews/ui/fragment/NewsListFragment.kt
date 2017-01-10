@@ -85,12 +85,12 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView {
     }
 
     override fun onError(error: Throwable) {
-        showSnackbar(NetworkUtils.httpErrorHandler(activity, error))
+        showSnackBar(NetworkUtils.httpErrorHandler(activity, error))
         newsListPresenter.cancelProgress()
     }
 
     override fun onCancelProgress() {
-        if (refresh != null) {
+        refresh?.apply {
             refresh.removeCallbacks(refreshRun)
             refresh.isRefreshing = false
             refresh.destroyDrawingCache()
@@ -102,11 +102,11 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView {
         if ((activity as MainActivity).isOnline()) {
             (activity as MainActivity).addFragment(NewsContentFragment.newInstance(news.id!!))
         } else {
-            showSnackbar(getString(R.string.not_online))
+            showSnackBar(getString(R.string.not_online))
         }
     }
 
-    private fun showSnackbar(text: String) {
+    private fun showSnackBar(text: String) {
         val snack = Snackbar.make(recyclerView, text, Snackbar.LENGTH_INDEFINITE)
         snack.setWhiteText()
         snack.show()
@@ -115,7 +115,7 @@ class NewsListFragment : MvpAppCompatFragment(), NewsListView {
     }
 
     fun showProgress() {
-        if (refresh != null) refresh.post { refreshRun }
+        refresh?.apply { refresh.post { refreshRun } }
     }
 }
 
