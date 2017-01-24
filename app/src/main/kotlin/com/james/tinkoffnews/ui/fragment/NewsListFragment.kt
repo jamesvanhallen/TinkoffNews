@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.james.tinkoffnews.*
-import com.james.tinkoffnews.adapter.RoutesAdapter
+import com.james.tinkoffnews.ui.adapter.RoutesAdapter
 import com.james.tinkoffnews.mvp.model.News
 import com.james.tinkoffnews.mvp.presenter.NewsListPresenter
 import com.james.tinkoffnews.mvp.view.NewsListView

@@ -10,14 +10,20 @@ class NetworkUtils {
     companion object {
 
         fun httpErrorHandler(context: Context, throwable: Throwable): String {
-            var error = context.getString(R.string.unknown_error)
+
             if (throwable is HttpException) {
-                error = throwable.message()
+                return throwable.message()
             } else if (throwable is IOException) {
-                error = context.getString(R.string.server_error)
+                return context.getString(R.string.server_error)
             }
 
-            return error
+            throwable.message.apply {
+
+                return throwable.message!!
+
+            }
+
+            return context.getString(R.string.unknown_error)
         }
     }
 }

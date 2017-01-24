@@ -17,7 +17,6 @@ class MainActivity : MvpAppCompatActivity() {
         supportActionBar?.apply {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setHomeButtonEnabled(true)
-            supportActionBar?.show()
         }
 
         toolbar.setNavigationOnClickListener { onBackPressed() }

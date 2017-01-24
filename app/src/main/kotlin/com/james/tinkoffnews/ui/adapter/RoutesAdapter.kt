@@ -1,4 +1,4 @@
-package com.james.tinkoffnews.adapter
+package com.james.tinkoffnews.ui.adapter
 
 import android.os.Build
 import android.support.v7.widget.RecyclerView
